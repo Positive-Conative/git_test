@@ -7,11 +7,15 @@
 </head>
 <body>
     <form name="my-form">
-        <input type="text" name="my-id" id="my-id-id" class="my-id-class" placeholder="hoooo">
-        <input type="button" value="input버튼">
-        <button type="button">그냥 버튼</button>
-        <button type="reset">리셋 버튼</button>
-        <button type="submit">제출</button>
+        <input type="text" name="my-id" id="id" />
+        <button id="my-button" type="button">제출</button>
     </form>
 </body>
 </html>
+
+<script>
+    document.getElementById('my-button').addEventListener('click', async () => {
+        const myId = document.querySelector('#id').value;
+        await fetch(`/boom/${myId}`)  // 서버로 요청해!
+    });
+</script>
