@@ -4,14 +4,73 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <style>
+        table {
+            border-collapse: collapse;
+        }
+
+        table td, table th {
+            border: 1px solid black;
+        }
+    </style>
 </head>
 <body>
-    <form name="my-form">
-        <input type="text" name="my-id" id="my-id-id" class="my-id-class" placeholder="hoooo">
-        <input type="button" value="input버튼">
-        <button type="button">그냥 버튼</button>
-        <button type="reset">리셋 버튼</button>
-        <button type="submit">제출</button>
+    <table id="boardList">
+        <tr>
+            <th>제목</th>
+            <th>내용</th>
+        </tr>
+    </table>
+
+    <form name="myForm">
+        <input type="text" name="title"/>
+        <input type="text" name="content"/>
+        <button type="button" id="submit">제출하기</button>
     </form>
 </body>
 </html>
+
+<script>
+    (async ()=>{
+        const response = await fetch('/board');
+        // const {result} = await response.json();
+        // 오른쪽 결과값의 result라는 키값을 const로 선언하겠다.
+        const result1 = await response.json();
+        const myTable = document.getElementById('boardList');
+
+        for(const value of result1.result) {
+            myTable.innerHTML += `
+                <tr>
+                    <td>${value.title}</td>
+                    <td>${value.content}</td>
+                </tr>
+            `;
+        }
+    })();
+
+
+    const submitBtn = document.getElementById('submit');
+
+    submitBtn.addEventListener('click', async function () {
+        const title = document.myForm.title.value;
+        const content = document.myForm.content.value;
+        const bodyData = {
+            title,
+            content
+        }
+
+        const response = await fetch('/board', {
+            method: "POST", // delete put path post / get
+            body: JSON.stringify(bodyData),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+        const result = await response.json();
+        console.log(result);
+        
+    });
+
+
+    
+</script>
